@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Photo & Signature Studio</title>
+  <style>
+    :root{
+      --bg1:#0f172a;
+      --bg2:#312e81;
+      --card:rgba(255,255,255,.12);
+      --stroke:rgba(255,255,255,.18);
+      --text:#e5e7eb;
+      --muted:rgba(229,231,235,.78);
+      --accent1:#22d3ee;
+      --accent2:#8b5cf6;
+      --accent3:#fb7185;
+      --good:#22c55e;
+      --bad:#ef4444;
+    }
+
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+    }
+
+    body{
+      min-height:100vh;
+      font-family:Inter, Arial, sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(34,211,238,.24), transparent 26%),
+        radial-gradient(circle at bottom right, rgba(139,92,246,.26), transparent 28%),
+        linear-gradient(135deg, var(--bg1), var(--bg2));
+      padding:24px;
+    }
+
+    .wrap{
+      max-width:1200px;
+      margin:0 auto;
+    }
+
+    .hero{
+      text-align:center;
+      padding:18px 10px 26px;
+    }
+
+    .badge{
+      display:inline-block;
+      padding:8px 14px;
+      border-radius:999px;
+      background:rgba(255,255,255,.12);
+      border:1px solid rgba(255,255,255,.18);
+      font-size:13px;
+      color:#fff;
+      margin-bottom:14px;
+      backdrop-filter: blur(12px);
+    }
+
+    .hero h1{
+      font-size:38px;
+      line-height:1.15;
+      margin-bottom:10px;
+      letter-spacing:.2px;
+    }
+
+    .hero p{
+      color:var(--muted);
+      max-width:760px;
+      margin:0 auto;
+      line-height:1.75;
+      font-size:15px;
+    }
+
+    .layout{
+      display:grid;
+      grid-template-columns:1.05fr .95fr;
+      gap:18px;
+      align-items:start;
+    }
+
+    .glass{
+      background:var(--card);
+      border:1px solid var(--stroke);
+      border-radius:24px;
+      box-shadow:0 18px 50px rgba(0,0,0,.22);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+
+    .panel{
+      padding:20px;
+    }
+
+    .panel h2{
+      font-size:20px;
+      margin-bottom:8px;
+    }
+
+    .panel .sub{
+      font-size:13px;
+      color:var(--muted);
+      margin-bottom:16px;
+      line-height:1.6;
+    }
+
+    .grid2{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:16px;
+    }
+
+    .upload-card{
+      position:relative;
+      padding:18px;
+      border-radius:20px;
+      background:rgba(255,255,255,.09);
+      border:1px solid rgba(255,255,255,.14);
+      transition:.25s ease;
+      overflow:hidden;
+    }
+
+    .upload-card:hover{
+      transform:translateY(-2px);
+      border-color:rgba(255,255,255,.28);
+      box-shadow:0 12px 28px rgba(0,0,0,.18);
+    }
+
+    .upload-title{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      margin-bottom:14px;
+    }
+
+    .iconbox{
+      width:54px;
+      height:54px;
+      border-radius:16px;
+      display:grid;
+      place-items:center;
+      font-size:26px;
+      color:#fff;
+      box-shadow:0 10px 24px rgba(0,0,0,.18);
+    }
+
+    .icon-photo{ background:linear-gradient(135deg, #06b6d4, #2563eb); }
+    .icon-sign{ background:linear-gradient(135deg, #fb7185, #8b5cf6); }
+
+    .upload-title h3{
+      font-size:18px;
+      margin-bottom:3px;
+    }
+
+    .upload-title span{
+      font-size:13px;
+      color:var(--muted);
+    }
+
+    .drop-btn{
+      display:block;
+      border:1.8px dashed rgba(255,255,255,.28);
+      background:linear-gradient(180deg, rgba(255,255,255,.14), rgba(255,255,255,.06));
+      border-radius:18px;
+      padding:16px;
+      text-align:center;
+      cursor:pointer;
+      transition:.22s ease;
+      margin-bottom:14px;
+    }
+
+    .drop-btn:hover{
+      border-color:#fff;
+      transform:translateY(-1px);
+    }
+
+    .drop-btn strong{
+      display:block;
+      font-size:15px;
+      margin-bottom:5px;
+      color:#fff;
+    }
+
+    .drop-btn small{
+      color:var(--muted);
+      line-height:1.5;
+    }
+
+    input[type="file"]{
+      display:none;
+    }
+
+    .fields{
+      display:grid;
+      gap:12px;
+    }
+
+    .field label{
+      display:block;
+      font-size:13px;
+      color:#fff;
+      margin-bottom:7px;
+      font-weight:700;
+    }
+
+    .field input{
+      width:100%;
+      padding:12px 14px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.18);
+      background:rgba(255,255,255,.1);
+      color:#fff;
+      outline:none;
+      font-size:15px;
+    }
+
+    .field input::placeholder{ color:rgba(255,255,255,.45); }
+    .field input:focus{
+      border-color:#fff;
+      box-shadow:0 0 0 4px rgba(255,255,255,.08);
+    }
+
+    .controls{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:14px;
+      margin-top:16px;
+    }
+
+    .btn{
+      width:100%;
+      border:none;
+      border-radius:16px;
+      padding:15px 18px;
+      font-size:16px;
+      font-weight:800;
+      cursor:pointer;
+      color:#fff;
+      transition:.22s ease;
+      box-shadow:0 14px 28px rgba(0,0,0,.18);
+    }
+
+    .btn:hover{ transform:translateY(-2px); }
+
+    .btn:disabled{
+      background:#64748b !important;
+      cursor:not-allowed;
+      box-shadow:none;
+      transform:none;
+    }
+
+    .btn-photo{ background:linear-gradient(135deg, #06b6d4, #2563eb); }
+    .btn-sign{ background:linear-gradient(135deg, #fb7185, #8b5cf6); }
+
+    .preview-box{
+      padding:20px;
+    }
+
+    .preview-head{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      align-items:center;
+      margin-bottom:16px;
+    }
+
+    .preview-head h2{
+      font-size:20px;
+    }
+
+    .tip{
+      font-size:12px;
+      color:var(--muted);
+      text-align:right;
+      line-height:1.5;
+    }
+
+    .preview-grid{
+      display:grid;
+      gap:16px;
+    }
+
+    .preview{
+      min-height:245px;
+      border-radius:20px;
+      padding:16px;
+      background:rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.14);
+    }
+
+    .preview h3{
+      font-size:17px;
+      margin-bottom:12px;
+    }
+
+    .preview-area{
+      display:none;
+      text-align:center;
+    }
+
+    .preview-area.show{ display:block; }
+
+    .preview-area img{
+      width:100%;
+      max-height:160px;
+      object-fit:contain;
+      border-radius:14px;
+      background:#fff;
+      padding:8px;
+    }
+
+    .info{
+      margin-top:12px;
+      background:rgba(255,255,255,.92);
+      color:#111827;
+      border-radius:14px;
+      padding:10px 12px;
+      font-size:14px;
+    }
+
+    .row{
+      display:flex;
+      justify-content:space-between;
+      padding:5px 0;
+      border-bottom:1px solid #e5e7eb;
+    }
+
+    .row:last-child{ border-bottom:none; }
+
+    .messages{
+      margin-top:16px;
+      display:grid;
+      gap:10px;
+    }
+
+    .msg{
+      display:none;
+      padding:14px 16px;
+      border-radius:16px;
+      white-space:pre-wrap;
+      line-height:1.6;
+      font-size:14px;
+    }
+
+    .msg.show{ display:block; }
+    .loading{
+      background:rgba(14,165,233,.15);
+      border:1px solid rgba(14,165,233,.35);
+      color:#dbeafe;
+    }
+    .success{
+      background:rgba(34,197,94,.16);
+      border:1px solid rgba(34,197,94,.36);
+      color:#dcfce7;
+    }
+    .error{
+      background:rgba(239,68,68,.16);
+      border:1px solid rgba(239,68,68,.36);
+      color:#fee2e2;
+    }
+
+    .note{
+      margin-top:16px;
+      color:rgba(255,255,255,.8);
+      font-size:13px;
+      line-height:1.7;
+      text-align:center;
+    }
+
+    @media (max-width: 980px){
+      .layout{ grid-template-columns:1fr; }
+    }
+
+    @media (max-width: 640px){
+      body{ padding:14px; }
+      .hero h1{ font-size:28px; }
+      .grid2,.controls{ grid-template-columns:1fr; }
+      .preview-head{ flex-direction:column; align-items:flex-start; }
+      .tip{ text-align:left; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="hero">
+      <div class="badge">NITIN VERMA's UTI PAN TOOL</div>
+      <h1>Uti Pan Card Ke Liye Photo aur Signature Corp Tool </h1>
+      <p>
+        Ab Pan Card Ke Liye Photo Aur Signature crop karne me koi Problum Nahi Hogi.
+      </p>
+    </div>
+
+    <div class="layout">
+      <div class="glass panel">
+        <h2>Upload & Settings</h2>
+        <div class="sub">
+          Photo target: 213 × 213 px, 300 DPI, approx 25 KB.
+          Signature target: 400 × 200 px, 600 DPI, approx 50 KB.
+        </div>
+
+        <div class="grid2">
+          <div class="upload-card">
+            <div class="upload-title">
+              <div class="iconbox icon-photo">🖼️</div>
+              <div>
+                <h3>Photo</h3>
+                <span>Optional upload</span>
+              </div>
+            </div>
+
+            <label class="drop-btn" for="photoInput">
+              <strong>Click to choose photo</strong>
+              <small>JPEG / PNG supported</small>
+            </label>
+            <input type="file" id="photoInput" accept="image/jpeg,.jpg,.jpeg,image/png,.png">
+
+            <div class="fields">
+              <div class="field">
+                <label for="photoDpi">Photo DPI</label>
+                <input type="number" id="photoDpi" value="300" min="1" max="10000">
+              </div>
+              <div class="field">
+                <label for="photoW">Photo Width (px)</label>
+                <input type="number" id="photoW" value="213" min="1" max="10000">
+              </div>
+              <div class="field">
+                <label for="photoH">Photo Height (px)</label>
+                <input type="number" id="photoH" value="213" min="1" max="10000">
+              </div>
+            </div>
+          </div>
+
+          <div class="upload-card">
+            <div class="upload-title">
+              <div class="iconbox icon-sign">✍️</div>
+              <div>
+                <h3>Signature</h3>
+                <span>Optional upload</span>
+              </div>
+            </div>
+
+            <label class="drop-btn" for="signatureInput">
+              <strong>Click to choose signature</strong>
+              <small>JPEG / PNG supported</small>
+            </label>
+            <input type="file" id="signatureInput" accept="image/jpeg,.jpg,.jpeg,image/png,.png">
+
+            <div class="fields">
+              <div class="field">
+                <label for="sigDpi">Signature DPI</label>
+                <input type="number" id="sigDpi" value="600" min="1" max="10000">
+              </div>
+              <div class="field">
+                <label for="sigW">Signature Width (px)</label>
+                <input type="number" id="sigW" value="400" min="1" max="10000">
+              </div>
+              <div class="field">
+                <label for="sigH">Signature Height (px)</label>
+                <input type="number" id="sigH" value="200" min="1" max="10000">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="controls">
+          <button class="btn btn-photo" id="photoBtn" onclick="downloadPhoto()" disabled>Download Photo</button>
+          <button class="btn btn-sign" id="signatureBtn" onclick="downloadSignature()" disabled>Download Signature</button>
+        </div>
+
+        <div class="messages">
+          <div id="loading" class="msg loading">⏳ Processing...</div>
+          <div id="successMessage" class="msg success"></div>
+          <div id="errorMessage" class="msg error"></div>
+        </div>
+      </div>
+
+      <div class="glass preview-box">
+        <div class="preview-head">
+          <h2>Live Preview</h2>
+          <div class="tip">
+            Browser preview only.<br>
+            Yaha Keval Uplode Image Ke size dikhengy.
+          </div>
+        </div>
+
+        <div class="preview-grid">
+          <div class="preview">
+            <h3>Photo Preview</h3>
+            <div id="photoPreview" class="preview-area">
+              <img id="photoImg" alt="Photo preview">
+              <div class="info" id="photoInfo"></div>
+            </div>
+          </div>
+
+          <div class="preview">
+            <h3>Signature Preview</h3>
+            <div id="signaturePreview" class="preview-area">
+              <img id="signatureImg" alt="Signature preview">
+              <div class="info" id="signatureInfo"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="note">
+      Note: Ager Koi Problum Aa rhi ho to Nitin Verma Se Sampark Kare.
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/piexifjs@1.0.0/piexif.js"></script>
+  <script>
+    let photoFile = null;
+    let signatureFile = null;
+
+    function validFile(file) {
+      return file && (file.type.includes('jpeg') || file.type.includes('png') || /\.(jpe?g|png)$/i.test(file.name));
+    }
+
+    function showMessage(type, text) {
+      const loading = document.getElementById('loading');
+      const successMessage = document.getElementById('successMessage');
+      const errorMessage = document.getElementById('errorMessage');
+
+      loading.classList.remove('show');
+      successMessage.classList.remove('show');
+      errorMessage.classList.remove('show');
+
+      if (type === 'loading') {
+        loading.textContent = text || '⏳ Processing...';
+        loading.classList.add('show');
+      } else if (type === 'success') {
+        successMessage.textContent = text;
+        successMessage.classList.add('show');
+      } else if (type === 'error') {
+        errorMessage.textContent = text;
+        errorMessage.classList.add('show');
+      }
+    }
+
+    function showPreview(file, imgEl, infoEl, previewEl) {
+      const reader = new FileReader();
+      reader.onload = e => {
+        imgEl.src = e.target.result;
+        previewEl.classList.add('show');
+        imgEl.onload = () => {
+          infoEl.innerHTML = `
+            <div class="row"><span>Width</span><span>${imgEl.width}px</span></div>
+            <div class="row"><span>Height</span><span>${imgEl.height}px</span></div>
+            <div class="row"><span>Format</span><span>${file.type.split('/')[1].toUpperCase()}</span></div>
+            <div class="row"><span>Size</span><span>${(file.size / 1024).toFixed(2)} KB</span></div>
+          `;
+        };
+      };
+      reader.readAsDataURL(file);
+    }
+
+    async function fileToCanvas(file, targetW, targetH) {
+      const bitmap = await createImageBitmap(file);
+      const canvas = document.createElement('canvas');
+      canvas.width = targetW;
+      canvas.height = targetH;
+      const ctx = canvas.getContext('2d');
+
+      ctx.fillStyle = '#fff';
+      ctx.fillRect(0, 0, targetW, targetH);
+
+      const ratio = Math.min(targetW / bitmap.width, targetH / bitmap.height);
+      const newW = Math.round(bitmap.width * ratio);
+      const newH = Math.round(bitmap.height * ratio);
+      const x = Math.round((targetW - newW) / 2);
+      const y = Math.round((targetH - newH) / 2);
+
+      ctx.drawImage(bitmap, x, y, newW, newH);
+      return canvas;
+    }
+
+    function canvasToJpegBlob(canvas, quality = 0.92) {
+      return new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', quality));
+    }
+
+    async function setJpegDpi(blob, dpi) {
+      const ab = await blob.arrayBuffer();
+      let binary = '';
+      const bytes = new Uint8Array(ab);
+      for (let i = 0; i < bytes.length; i++) binary += String.fromCharCode(bytes[i]);
+
+      let exif = piexif.load(binary);
+      exif['0th'][piexif.ImageIFD.XResolution] = [dpi, 1];
+      exif['0th'][piexif.ImageIFD.YResolution] = [dpi, 1];
+      exif['0th'][piexif.ImageIFD.ResolutionUnit] = 2;
+
+      const dumped = piexif.dump(exif);
+      const inserted = piexif.insert(dumped, binary);
+
+      const out = new Uint8Array(inserted.length);
+      for (let i = 0; i < inserted.length; i++) out[i] = inserted.charCodeAt(i);
+
+      return new Blob([out], { type: 'image/jpeg' });
+    }
+
+    function downloadBlob(blob, name) {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = name;
+      a.click();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+
+    async function processSingle(file, targetW, targetH, dpi, baseName) {
+      const canvas = await fileToCanvas(file, targetW, targetH);
+
+      let quality = 0.92;
+      let blob = await canvasToJpegBlob(canvas, quality);
+
+      while (blob.size < 12 * 1024 && quality < 1) {
+        quality += 0.03;
+        if (quality > 1) quality = 1;
+        blob = await canvasToJpegBlob(canvas, quality);
+        if (quality === 1) break;
+      }
+
+      blob = await setJpegDpi(blob, dpi);
+      downloadBlob(blob, `${baseName}-${dpi}dpi-${targetW}x${targetH}.jpg`);
+      return blob.size;
+    }
+
+    async function downloadPhoto() {
+      if (!photoFile) {
+        alert('Pehle photo select karo.');
+        return;
+      }
+      if (!validFile(photoFile)) {
+        alert('Photo ke liye JPEG/PNG file chahiye.');
+        return;
+      }
+
+      photoBtn.disabled = true;
+      showMessage('loading', '⏳ Photo process ho raha hai...');
+
+      try {
+        const size = await processSingle(photoFile, parseInt(photoW.value), parseInt(photoH.value), parseInt(photoDpi.value), 'photo');
+        showMessage('success', `✅ Photo downloaded successfully.\nOutput size: ${Math.round(size / 1024)} KB`);
+      } catch (e) {
+        showMessage('error', e.message);
+      } finally {
+        photoBtn.disabled = false;
+      }
+    }
+
+    async function downloadSignature() {
+      if (!signatureFile) {
+        alert('Pehle signature select karo.');
+        return;
+      }
+      if (!validFile(signatureFile)) {
+        alert('Signature ke liye JPEG/PNG file chahiye.');
+        return;
+      }
+
+      signatureBtn.disabled = true;
+      showMessage('loading', '⏳ Signature process ho raha hai...');
+
+      try {
+        const size = await processSingle(signatureFile, parseInt(sigW.value), parseInt(sigH.value), parseInt(sigDpi.value), 'signature');
+        showMessage('success', `✅ Signature downloaded successfully.\nOutput size: ${Math.round(size / 1024)} KB`);
+      } catch (e) {
+        showMessage('error', e.message);
+      } finally {
+        signatureBtn.disabled = false;
+      }
+    }
+
+    photoInput.addEventListener('change', e => {
+      const f = e.target.files[0];
+      if (f) {
+        photoFile = f;
+        showPreview(f, photoImg, photoInfo, photoPreview);
+        photoBtn.disabled = false;
+      }
+    });
+
+    signatureInput.addEventListener('change', e => {
+      const f = e.target.files[0];
+      if (f) {
+        signatureFile = f;
+        showPreview(f, signatureImg, signatureInfo, signaturePreview);
+        signatureBtn.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>
