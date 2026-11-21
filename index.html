@@ -3,31 +3,21 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>🖼 Photo & Signature Studio</title>
-  
+  <title>Photo & Signature Studio</title>
+
   <!-- Cropper.js CSS -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" />
-  
+
   <style>
     :root{
-      --bg1:#0f172a;
-      --bg2:#312e81;
-      --card:rgba(255,255,255,.12);
-      --stroke:rgba(255,255,255,.18);
-      --text:#e5e7eb;
-      --muted:rgba(229,231,235,.78);
-      --accent1:#22d3ee;
-      --accent2:#8b5cf6;
-      --accent3:#fb7185;
-      --good:#22c55e;
-      --bad:#ef4444;
+      --bg1:#0f172a; --bg2:#312e81;
+      --card:rgba(255,255,255,.12); --stroke:rgba(255,255,255,.18);
+      --text:#e5e7eb; --muted:rgba(229,231,235,.78);
+      --accent1:#22d3ee; --accent2:#8b5cf6; --accent3:#fb7185;
+      --good:#22c55e; --bad:#ef4444;
     }
 
-    *{
-      margin:0;
-      padding:0;
-      box-sizing:border-box;
-    }
+    *{ margin:0; padding:0; box-sizing:border-box; }
 
     body{
       min-height:100vh;
@@ -40,390 +30,236 @@
       padding:24px;
     }
 
-    .wrap{
-      max-width:1200px;
-      margin:0 auto;
-    }
-
-    .hero{
-      text-align:center;
-      padding:18px 10px 26px;
-    }
+    .wrap{ max-width:1200px; margin:0 auto; }
+    .hero{ text-align:center; padding:18px 10px 26px; }
 
     .badge{
-      display:inline-block;
-      padding:8px 14px;
-      border-radius:999px;
-      background:rgba(255,255,255,.12);
-      border:1px solid rgba(255,255,255,.18);
-      font-size:13px;
-      color:#fff;
-      margin-bottom:14px;
-      backdrop-filter: blur(12px);
+      display:inline-block; padding:8px 14px; border-radius:999px;
+      background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.18);
+      font-size:13px; color:#fff; margin-bottom:14px; backdrop-filter: blur(12px);
     }
 
-    .hero h1{
-      font-size:38px;
-      line-height:1.15;
-      margin-bottom:10px;
-      letter-spacing:.2px;
-    }
+    .hero h1{ font-size:38px; line-height:1.15; margin-bottom:10px; letter-spacing:.2px; }
+    .hero p{ color:var(--muted); max-width:760px; margin:0 auto; line-height:1.75; font-size:15px; }
 
-    .hero p{
-      color:var(--muted);
-      max-width:760px;
-      margin:0 auto;
-      line-height:1.75;
-      font-size:15px;
-    }
-
-    .layout{
-      display:grid;
-      grid-template-columns:1.05fr .95fr;
-      gap:18px;
-      align-items:start;
-    }
+    .layout{ display:grid; grid-template-columns:1.05fr .95fr; gap:18px; align-items:start; }
 
     .glass{
-      background:var(--card);
-      border:1px solid var(--stroke);
-      border-radius:24px;
+      background:var(--card); border:1px solid var(--stroke); border-radius:24px;
       box-shadow:0 18px 50px rgba(0,0,0,.22);
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
+      backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
     }
 
-    .panel{
-      padding:20px;
-    }
+    .panel{ padding:20px; }
+    .panel h2{ font-size:20px; margin-bottom:8px; }
+    .panel .sub{ font-size:13px; color:var(--muted); margin-bottom:16px; line-height:1.6; }
 
-    .panel h2{
-      font-size:20px;
-      margin-bottom:8px;
-    }
-
-    .panel .sub{
-      font-size:13px;
-      color:var(--muted);
-      margin-bottom:16px;
-      line-height:1.6;
-    }
-
-    .grid2{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:16px;
-    }
+    .grid2{ display:grid; grid-template-columns:1fr 1fr; gap:16px; }
 
     .upload-card{
-      position:relative;
-      padding:18px;
-      border-radius:20px;
-      background:rgba(255,255,255,.09);
-      border:1px solid rgba(255,255,255,.14);
-      transition:.25s ease;
-      overflow:hidden;
+      position:relative; padding:18px; border-radius:20px;
+      background:rgba(255,255,255,.09); border:1px solid rgba(255,255,255,.14);
+      transition:.25s ease; overflow:hidden;
     }
 
     .upload-card:hover{
-      transform:translateY(-2px);
-      border-color:rgba(255,255,255,.28);
+      transform:translateY(-2px); border-color:rgba(255,255,255,.28);
       box-shadow:0 12px 28px rgba(0,0,0,.18);
     }
 
-    .upload-title{
-      display:flex;
-      align-items:center;
-      gap:12px;
-      margin-bottom:14px;
-    }
+    .upload-title{ display:flex; align-items:center; gap:12px; margin-bottom:14px; }
 
     .iconbox{
-      width:54px;
-      height:54px;
-      border-radius:16px;
-      display:grid;
-      place-items:center;
-      font-size:26px;
-      color:#fff;
-      box-shadow:0 10px 24px rgba(0,0,0,.18);
+      width:54px; height:54px; border-radius:16px; display:grid; place-items:center;
+      font-size:26px; color:#fff; box-shadow:0 10px 24px rgba(0,0,0,.18);
     }
 
     .icon-photo{ background:linear-gradient(135deg, #06b6d4, #2563eb); }
     .icon-sign{ background:linear-gradient(135deg, #fb7185, #8b5cf6); }
 
-    .upload-title h3{
-      font-size:18px;
-      margin-bottom:3px;
-    }
-
-    .upload-title span{
-      font-size:13px;
-      color:var(--muted);
-    }
+    .upload-title h3{ font-size:18px; margin-bottom:3px; }
+    .upload-title span{ font-size:13px; color:var(--muted); }
 
     .drop-btn{
-      display:block;
-      border:1.8px dashed rgba(255,255,255,.28);
+      display:block; border:1.8px dashed rgba(255,255,255,.28);
       background:linear-gradient(180deg, rgba(255,255,255,.14), rgba(255,255,255,.06));
-      border-radius:18px;
-      padding:16px;
-      text-align:center;
-      cursor:pointer;
-      transition:.22s ease;
-      margin-bottom:14px;
+      border-radius:18px; padding:16px; text-align:center;
+      cursor:pointer; transition:.22s ease; margin-bottom:14px;
     }
 
-    .drop-btn:hover{
-      border-color:#fff;
-      transform:translateY(-1px);
-    }
+    .drop-btn:hover{ border-color:#fff; transform:translateY(-1px); }
+    .drop-btn strong{ display:block; font-size:15px; margin-bottom:5px; color:#fff; }
+    .drop-btn small{ color:var(--muted); line-height:1.5; }
 
-    .drop-btn strong{
-      display:block;
-      font-size:15px;
-      margin-bottom:5px;
-      color:#fff;
-    }
-
-    .drop-btn small{
-      color:var(--muted);
-      line-height:1.5;
-    }
-
-    input[type="file"]{
-      display:none;
-    }
-
-    .fields{
-      display:grid;
-      gap:12px;
-    }
+    input[type="file"]{ display:none; }
+    .fields{ display:grid; gap:12px; }
 
     .field label{
-      display:block;
-      font-size:13px;
-      color:#fff;
-      margin-bottom:7px;
-      font-weight:700;
+      display:block; font-size:13px; color:#fff; margin-bottom:7px; font-weight:700;
     }
 
     .field input{
-      width:100%;
-      padding:12px 14px;
-      border-radius:12px;
-      border:1px solid rgba(255,255,255,.18);
-      background:rgba(255,255,255,.1);
-      color:#fff;
-      outline:none;
-      font-size:15px;
+      width:100%; padding:12px 14px; border-radius:12px;
+      border:1px solid rgba(255,255,255,.18); background:rgba(255,255,255,.1);
+      color:#fff; outline:none; font-size:15px;
     }
 
     .field input::placeholder{ color:rgba(255,255,255,.45); }
-    .field input:focus{
-      border-color:#fff;
-      box-shadow:0 0 0 4px rgba(255,255,255,.08);
-    }
+    .field input:focus{ border-color:#fff; box-shadow:0 0 0 4px rgba(255,255,255,.08); }
 
-    .controls{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:14px;
-      margin-top:16px;
-    }
+    .controls{ display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:16px; }
 
     .btn{
-      width:100%;
-      border:none;
-      border-radius:16px;
-      padding:15px 18px;
-      font-size:16px;
-      font-weight:800;
-      cursor:pointer;
-      color:#fff;
-      transition:.22s ease;
-      box-shadow:0 14px 28px rgba(0,0,0,.18);
+      width:100%; border:none; border-radius:16px; padding:15px 18px;
+      font-size:16px; font-weight:800; cursor:pointer; color:#fff;
+      transition:.22s ease; box-shadow:0 14px 28px rgba(0,0,0,.18);
     }
 
     .btn:hover{ transform:translateY(-2px); }
 
     .btn:disabled{
-      background:#64748b !important;
-      cursor:not-allowed;
-      box-shadow:none;
-      transform:none;
+      background:#64748b !important; cursor:not-allowed;
+      box-shadow:none; transform:none;
     }
 
     .btn-photo{ background:linear-gradient(135deg, #06b6d4, #2563eb); }
     .btn-sign{ background:linear-gradient(135deg, #fb7185, #8b5cf6); }
 
-    .preview-box{
-      padding:20px;
-    }
+    .preview-box{ padding:20px; }
 
     .preview-head{
-      display:flex;
-      justify-content:space-between;
-      gap:10px;
-      align-items:center;
-      margin-bottom:16px;
+      display:flex; justify-content:space-between; gap:10px;
+      align-items:center; margin-bottom:16px;
     }
 
-    .preview-head h2{
-      font-size:20px;
-    }
-
-    .tip{
-      font-size:12px;
-      color:var(--muted);
-      text-align:right;
-      line-height:1.5;
-    }
-
-    .preview-grid{
-      display:grid;
-      gap:16px;
-    }
+    .preview-head h2{ font-size:20px; }
+    .tip{ font-size:12px; color:var(--muted); text-align:right; line-height:1.5; }
+    .preview-grid{ display:grid; gap:16px; }
 
     .preview{
-      min-height:245px;
-      border-radius:20px;
-      padding:16px;
-      background:rgba(255,255,255,.08);
-      border:1px solid rgba(255,255,255,.14);
+      min-height:245px; border-radius:20px; padding:16px;
+      background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.14);
     }
 
-    .preview h3{
-      font-size:17px;
-      margin-bottom:12px;
-    }
-
-    .preview-area{
-      display:none;
-      text-align:center;
-    }
-
+    .preview h3{ font-size:17px; margin-bottom:12px; }
+    .preview-area{ display:none; text-align:center; }
     .preview-area.show{ display:block; }
 
     .preview-area img{
-      width:100%;
-      max-height:160px;
-      object-fit:contain;
-      border-radius:14px;
-      background:#fff;
-      padding:8px;
+      width:100%; max-height:160px; object-fit:contain;
+      border-radius:14px; background:#fff; padding:8px;
     }
 
     .info{
-      margin-top:12px;
-      background:rgba(255,255,255,.92);
-      color:#111827;
-      border-radius:14px;
-      padding:10px 12px;
-      font-size:14px;
+      margin-top:12px; background:rgba(255,255,255,.92); color:#111827;
+      border-radius:14px; padding:10px 12px; font-size:14px;
     }
 
     .row{
-      display:flex;
-      justify-content:space-between;
-      padding:5px 0;
-      border-bottom:1px solid #e5e7eb;
+      display:flex; justify-content:space-between;
+      padding:5px 0; border-bottom:1px solid #e5e7eb;
     }
 
     .row:last-child{ border-bottom:none; }
 
-    .messages{
-      margin-top:16px;
-      display:grid;
-      gap:10px;
-    }
+    .messages{ margin-top:16px; display:grid; gap:10px; }
 
     .msg{
-      display:none;
-      padding:14px 16px;
-      border-radius:16px;
-      white-space:pre-wrap;
-      line-height:1.6;
-      font-size:14px;
+      display:none; padding:14px 16px; border-radius:16px;
+      white-space:pre-wrap; line-height:1.6; font-size:14px;
     }
 
     .msg.show{ display:block; }
     .loading{
-      background:rgba(14,165,233,.15);
-      border:1px solid rgba(14,165,233,.35);
-      color:#dbeafe;
+      background:rgba(14,165,233,.15); border:1px solid rgba(14,165,233,.35); color:#dbeafe;
     }
     .success{
-      background:rgba(34,197,94,.16);
-      border:1px solid rgba(34,197,94,.36);
-      color:#dcfce7;
+      background:rgba(34,197,94,.16); border:1px solid rgba(34,197,94,.36); color:#dcfce7;
     }
     .error{
-      background:rgba(239,68,68,.16);
-      border:1px solid rgba(239,68,68,.36);
-      color:#fee2e2;
+      background:rgba(239,68,68,.16); border:1px solid rgba(239,68,68,.36); color:#fee2e2;
     }
 
     .note{
-      margin-top:16px;
-      color:rgba(255,255,255,.8);
-      font-size:13px;
-      line-height:1.7;
-      text-align:center;
+      margin-top:16px; color:rgba(255,255,255,.8);
+      font-size:13px; line-height:1.7; text-align:center;
     }
 
-    /* Crop Modal */
+    /* ===== Crop Modal ===== */
     .crop-modal{
-      display:none;
-      position:fixed;
-      inset:0;
-      background:rgba(0,0,0,.85);
-      z-index:9999;
-      align-items:center;
-      justify-content:center;
-      padding:20px;
+      display:none; position:fixed; inset:0;
+      background:rgba(0,0,0,.85); z-index:9999;
+      align-items:center; justify-content:center; padding:20px;
     }
 
-    .crop-modal.show{
-      display:flex;
-    }
+    .crop-modal.show{ display:flex; }
 
     .crop-container{
-      background:#1e293b;
-      border-radius:20px;
-      padding:20px;
-      max-width:90vw;
-      max-height:90vh;
-      display:flex;
-      flex-direction:column;
-      gap:16px;
+      background:#1e293b; border-radius:20px; padding:20px;
+      max-width:90vw; max-height:92vh;
+      display:flex; flex-direction:column; gap:14px;
+      width:min(720px, 92vw);
     }
 
     .crop-image-wrapper{
-      max-width:80vw;
-      max-height:60vh;
-      background:#0f172a;
-      border-radius:12px;
-      overflow:hidden;
+      background:#0f172a; border-radius:12px; overflow:hidden;
+      flex:1; min-height:0; display:flex;
+      align-items:center; justify-content:center;
+      /* drag cursor hint */
+      cursor: grab;
     }
+
+    .crop-image-wrapper:active{ cursor: grabbing; }
 
     .crop-image-wrapper img{
-      max-width:100%;
-      display:block;
+      max-width:100%; max-height:60vh; display:block;
     }
 
-    .crop-actions{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:12px;
+    /* Hint bar */
+    .crop-hint{
+      font-size:12px; color:rgba(229,231,235,.7);
+      text-align:center; letter-spacing:.2px;
     }
+    .crop-hint strong{ color:#22d3ee; }
+
+    /* ===== Zoom Controls ===== */
+    .crop-zoom{
+      display:flex; justify-content:center; align-items:center; gap:10px;
+      padding:8px; background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.12); border-radius:14px;
+    }
+
+    .btn-zoom{
+      width:48px; height:48px; border-radius:12px;
+      border:1px solid rgba(255,255,255,.16);
+      background:linear-gradient(135deg, rgba(255,255,255,.16), rgba(255,255,255,.06));
+      color:#fff; font-size:22px; font-weight:800; cursor:pointer;
+      display:grid; place-items:center; transition:.18s ease;
+      user-select:none; -webkit-tap-highlight-color:transparent;
+    }
+
+    .btn-zoom:hover{
+      background:linear-gradient(135deg, #22d3ee, #8b5cf6);
+      border-color:transparent; transform:translateY(-1px);
+    }
+
+    .btn-zoom:active{ transform:translateY(1px) scale(.96); }
+
+    .btn-zoom.reset{
+      width:auto; padding:0 16px; font-size:14px; letter-spacing:.5px;
+    }
+
+    .zoom-label{
+      font-size:12px; color:var(--muted); text-align:center;
+      min-width:70px; font-variant-numeric:tabular-nums;
+    }
+
+    .crop-actions{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
 
     .btn-crop{ background:linear-gradient(135deg, #22c55e, #16a34a); }
     .btn-cancel{ background:rgba(148,163,184,.9); }
 
-    @media (max-width: 980px){
-      .layout{ grid-template-columns:1fr; }
-    }
+    @media (max-width: 980px){ .layout{ grid-template-columns:1fr; } }
 
     @media (max-width: 640px){
       body{ padding:14px; }
@@ -431,6 +267,7 @@
       .grid2,.controls{ grid-template-columns:1fr; }
       .preview-head{ flex-direction:column; align-items:flex-start; }
       .tip{ text-align:left; }
+      .btn-zoom{ width:44px; height:44px; font-size:20px; }
     }
   </style>
 </head>
@@ -439,9 +276,7 @@
     <div class="hero">
       <div class="badge">NITIN VERMA's UTI PAN TOOL</div>
       <h1>Uti Pan Card Ke Liye Photo aur Signature Crop Tool </h1>
-      <p>
-        Ab Pan Card Ke Liye Photo Aur Signature crop karne me koi Problum Nahi Hogi.
-      </p>
+      <p>Ab Pan Card Ke Liye Photo Aur Signature crop karne me koi Problum Nahi Hogi.</p>
     </div>
 
     <div class="layout">
@@ -456,18 +291,13 @@
           <div class="upload-card">
             <div class="upload-title">
               <div class="iconbox icon-photo">🖼️</div>
-              <div>
-                <h3>Photo</h3>
-                <span>Select → Crop → Download</span>
-              </div>
+              <div><h3>Photo</h3><span>Select → Crop → Download</span></div>
             </div>
-
             <label class="drop-btn" for="photoInput">
               <strong>Click to choose photo</strong>
               <small>JPEG / PNG supported</small>
             </label>
             <input type="file" id="photoInput" accept="image/jpeg,.jpg,.jpeg,image/png,.png">
-
             <div class="fields">
               <div class="field">
                 <label for="photoDpi">Photo DPI</label>
@@ -487,18 +317,13 @@
           <div class="upload-card">
             <div class="upload-title">
               <div class="iconbox icon-sign">✍️</div>
-              <div>
-                <h3>Signature</h3>
-                <span>Select → Crop → Download</span>
-              </div>
+              <div><h3>Signature</h3><span>Select → Crop → Download</span></div>
             </div>
-
             <label class="drop-btn" for="signatureInput">
               <strong>Click to choose signature</strong>
               <small>JPEG / PNG supported</small>
             </label>
             <input type="file" id="signatureInput" accept="image/jpeg,.jpg,.jpeg,image/png,.png">
-
             <div class="fields">
               <div class="field">
                 <label for="sigDpi">Signature DPI</label>
@@ -568,6 +393,17 @@
       <div class="crop-image-wrapper">
         <img id="cropImage" src="" alt="Crop image">
       </div>
+
+      <div class="crop-hint">💡 <strong>Drag image</strong> to move · Scroll / pinch to zoom · Use buttons below</div>
+
+      <!-- Zoom Controls -->
+      <div class="crop-zoom">
+        <button type="button" class="btn-zoom" id="zoomOutBtn" title="Zoom Out (−)" aria-label="Zoom Out">−</button>
+        <button type="button" class="btn-zoom reset" id="zoomResetBtn" title="Reset Zoom">⟲ Reset</button>
+        <button type="button" class="btn-zoom" id="zoomInBtn" title="Zoom In (+)" aria-label="Zoom In">+</button>
+        <div class="zoom-label" id="zoomLabel">100%</div>
+      </div>
+
       <div class="crop-actions">
         <button class="btn btn-crop" id="cropSaveBtn">Crop & Save</button>
         <button class="btn btn-cancel" id="cropCancelBtn">Cancel</button>
@@ -606,6 +442,12 @@
     const cropSaveBtn = document.getElementById('cropSaveBtn');
     const cropCancelBtn = document.getElementById('cropCancelBtn');
 
+    // Zoom elements
+    const zoomInBtn = document.getElementById('zoomInBtn');
+    const zoomOutBtn = document.getElementById('zoomOutBtn');
+    const zoomResetBtn = document.getElementById('zoomResetBtn');
+    const zoomLabel = document.getElementById('zoomLabel');
+
     function validFile(file) {
       return file && (file.type.includes('jpeg') || file.type.includes('png') || /\.(jpe?g|png)$/i.test(file.name));
     }
@@ -631,21 +473,13 @@
       }
     }
 
-    function showPreview(file, imgEl, infoEl, previewEl) {
-      const reader = new FileReader();
-      reader.onload = e => {
-        imgEl.src = e.target.result;
-        previewEl.classList.add('show');
-        imgEl.onload = () => {
-          infoEl.innerHTML = `
-            <div class="row"><span>Width</span><span>${imgEl.width}px</span></div>
-            <div class="row"><span>Height</span><span>${imgEl.height}px</span></div>
-            <div class="row"><span>Format</span><span>${file.type.split('/')[1].toUpperCase()}</span></div>
-            <div class="row"><span>Size</span><span>${(file.size / 1024).toFixed(2)} KB</span></div>
-          `;
-        };
-      };
-      reader.readAsDataURL(file);
+    // ===== Update zoom label =====
+    function updateZoomLabel() {
+      if (!cropper) { zoomLabel.textContent = '100%'; return; }
+      const imgData = cropper.getImageData();
+      if (!imgData || !imgData.width) { zoomLabel.textContent = '100%'; return; }
+      const zoomPercent = Math.round((imgData.naturalWidth / imgData.width) * 100);
+      zoomLabel.textContent = `${isFinite(zoomPercent) && zoomPercent > 0 ? zoomPercent : 100}%`;
     }
 
     function openCropModal(dataURL, type) {
@@ -653,30 +487,60 @@
       cropImage.src = dataURL;
       cropModal.classList.add('show');
 
-      if (cropper) {
-        cropper.destroy();
-      }
+      if (cropper) cropper.destroy();
 
-      // Aspect ratio based on input fields
-      let aspectRatio = currentType === 'photo' 
+      const aspectRatio = currentType === 'photo'
         ? parseInt(photoW.value) / parseInt(photoH.value)
         : parseInt(sigW.value) / parseInt(sigH.value);
 
       cropper = new Cropper(cropImage, {
         aspectRatio: aspectRatio,
         viewMode: 1,
-        autoCropArea: 0.9,
+        // ===== KEY FIXES: image pan/zoom works properly =====
+        dragMode: 'move',          // drag anywhere → move image (pan)
+        cropBoxMovable: false,     // crop frame stays fixed
+        movable: true,             // image is movable
+        resizable: false,          // crop frame size fixed (strict aspect ratio)
+        autoCropArea: 1,           // crop frame fills available area
+        // ===== Zoom support =====
+        zoomable: true,
+        zoomOnWheel: true,
+        zoomOnTouch: true,
+        wheelZoomRatio: 0.1,
+        toggleDragModeOnDblclick: false,
+        background: false,
         responsive: true,
+        ready() { updateZoomLabel(); },
+        zoom() { updateZoomLabel(); }
       });
     }
 
     function closeCropModal() {
       cropModal.classList.remove('show');
-      if (cropper) {
-        cropper.destroy();
-        cropper = null;
-      }
+      if (cropper) { cropper.destroy(); cropper = null; }
+      zoomLabel.textContent = '100%';
     }
+
+    // ===== Zoom Buttons =====
+    zoomInBtn.addEventListener('click', () => {
+      if (cropper) { cropper.zoom(0.1); updateZoomLabel(); }
+    });
+
+    zoomOutBtn.addEventListener('click', () => {
+      if (cropper) { cropper.zoom(-0.1); updateZoomLabel(); }
+    });
+
+    zoomResetBtn.addEventListener('click', () => {
+      if (cropper) { cropper.reset(); updateZoomLabel(); }
+    });
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', (e) => {
+      if (!cropModal.classList.contains('show') || !cropper) return;
+      if (e.key === '+' || e.key === '=') { cropper.zoom(0.1); updateZoomLabel(); }
+      else if (e.key === '-' || e.key === '_') { cropper.zoom(-0.1); updateZoomLabel(); }
+      else if (e.key === '0') { cropper.reset(); updateZoomLabel(); }
+    });
 
     cropSaveBtn.addEventListener('click', () => {
       if (!cropper) return;
@@ -720,17 +584,11 @@
     photoInput.addEventListener('change', e => {
       const f = e.target.files[0];
       if (f) {
-        if (!validFile(f)) {
-          alert('JPEG/PNG file chahiye.');
-          return;
-        }
+        if (!validFile(f)) { alert('JPEG/PNG file chahiye.'); return; }
         photoFile = f;
         photoBtn.disabled = true;
-
         const reader = new FileReader();
-        reader.onload = ev => {
-          openCropModal(ev.target.result, 'photo');
-        };
+        reader.onload = ev => openCropModal(ev.target.result, 'photo');
         reader.readAsDataURL(f);
       }
     });
@@ -739,17 +597,11 @@
     signatureInput.addEventListener('change', e => {
       const f = e.target.files[0];
       if (f) {
-        if (!validFile(f)) {
-          alert('JPEG/PNG file chahiye.');
-          return;
-        }
+        if (!validFile(f)) { alert('JPEG/PNG file chahiye.'); return; }
         signatureFile = f;
         signatureBtn.disabled = true;
-
         const reader = new FileReader();
-        reader.onload = ev => {
-          openCropModal(ev.target.result, 'signature');
-        };
+        reader.onload = ev => openCropModal(ev.target.result, 'signature');
         reader.readAsDataURL(f);
       }
     });
@@ -801,7 +653,6 @@
       ctx.fillStyle = '#fff';
       ctx.fillRect(0, 0, targetW, targetH);
 
-      // fit image into target with aspect ratio
       const ratio = Math.min(targetW / img.width, targetH / img.height);
       const newW = Math.round(img.width * ratio);
       const newH = Math.round(img.height * ratio);
@@ -826,14 +677,9 @@
     }
 
     async function downloadPhoto() {
-      if (!croppedPhotoData) {
-        alert('Pehle photo select karke crop karo.');
-        return;
-      }
-
+      if (!croppedPhotoData) { alert('Pehle photo select karke crop karo.'); return; }
       photoBtn.disabled = true;
       showMessage('loading', '⏳ Photo process ho raha hai...');
-
       try {
         const size = await processCroppedImage(croppedPhotoData, parseInt(photoW.value), parseInt(photoH.value), parseInt(photoDpi.value), 'photo');
         showMessage('success', `✅ Photo downloaded successfully.\nOutput size: ${Math.round(size / 1024)} KB`);
@@ -845,14 +691,9 @@
     }
 
     async function downloadSignature() {
-      if (!croppedSignatureData) {
-        alert('Pehle signature select karke crop karo.');
-        return;
-      }
-
+      if (!croppedSignatureData) { alert('Pehle signature select karke crop karo.'); return; }
       signatureBtn.disabled = true;
       showMessage('loading', '⏳ Signature process ho raha hai...');
-
       try {
         const size = await processCroppedImage(croppedSignatureData, parseInt(sigW.value), parseInt(sigH.value), parseInt(sigDpi.value), 'signature');
         showMessage('success', `✅ Signature downloaded successfully.\nOutput size: ${Math.round(size / 1024)} KB`);
